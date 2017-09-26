@@ -18,29 +18,6 @@ var vertexPositionAttrib; // where to put position for vertex shader
 
 // ASSIGNMENT HELPER FUNCTIONS
 
-// callbacks for loading json asynch
-
-// when get fails
-function getFailed(evt) {
-    console.error(descr + " failed to load.");
-} // end when get fails
-
-// when get aborted
-function getAborted(evt) { 
-    console.error(descr + " was aborted by user.");
-} // end when get aborted
-
-// when get times out
-function getTimedOut(evt) {
-    console.error(descr + " took too long to load.");
-} // end when get times out
-
-// when get loads
-function getLoaded(evt) {
-    console.log(descr + " loaded.");
-} // end when get times out
-        
-
 // get the JSON file from the passed URL
 function getJSONFile(url,descr) {
     
@@ -49,7 +26,27 @@ function getJSONFile(url,descr) {
     if ((typeof(url) !== "string") || (typeof(descr) !== "string"))
         console.error("getJSONFile: parameter not a string");
     else { // else we have good params
-       
+        
+        // when get fails
+        function getFailed(evt) {
+            console.error(descr + " failed to load.");
+        } // end when get fails
+
+        // when get aborted
+        function getAborted(evt) { 
+            console.error(descr + " was aborted by user.");
+        } // end when get aborted
+
+        // when get times out
+        function getTimedOut(evt) {
+            console.error(descr + " took too long to load.");
+        } // end when get times out
+
+        // when get loads
+        function getLoaded(evt) {
+            console.log(descr + " loaded.");
+        } // end when get times out
+
         // set up http request object
         var httpReq = new XMLHttpRequest(); // a new http request
         httpReq.timeout = 2000; // wait 2 secs for async result then timeout
