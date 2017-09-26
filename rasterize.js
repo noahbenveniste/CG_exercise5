@@ -28,7 +28,7 @@ function getJSONFile(url,descr) {
     else { // else we have good params
         var httpReq = new XMLHttpRequest(); // a new http request
     
-        function loadSuccess { // if load succeeds, return the parsed response
+        function loadSuccess() { // if load succeeds, return the parsed response
             console.log(returnValue);
             console.log(this.responseText); 
             returnValue = JSON.parse(this.responseText);
