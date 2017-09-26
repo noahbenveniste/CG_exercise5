@@ -61,7 +61,7 @@ function getJSONFile(url,descr) {
     
         // parse get request response
         console.log(httpReq.responseText);
-        returnValue = JSON.parse(httpReq.responseText);
+        // returnValue = JSON.parse(httpReq.responseText);
     } // end if good params
     
     return(returnValue);
