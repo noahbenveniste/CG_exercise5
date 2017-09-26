@@ -28,17 +28,17 @@ function getJSONFile(url,descr) {
     else { // else we have good params
        
         // when get fails
-        function getFailed() {
+        function getFailed(evt) {
             console.error(descr + " failed to load.");
         } // end when get fails
         
         // when get aborted
-        function getAborted() { 
+        function getAborted(evt) { 
             console.error(descr + " was aborted by user.");
         } // end when get aborted
         
         // when get times out
-        function getTimedOut() {
+        function getTimedOut(evt) {
             console.error(descr + " took too long to load.");
         } // end when get times out
         
@@ -48,7 +48,7 @@ function getJSONFile(url,descr) {
         httpReq.addEventListener("error", getFailed);
         httpReq.addEventListener("abort", getAborted);
         httpReq.addEventListener("timeout", getTimedOut);
-        httpReq.addEVentListener("load", function() {});
+        httpReq.addEVentListener("load", function(evt) {});
 
         // issue async get request
         httpReq.open("GET",url,true); // init the request asynchronously
