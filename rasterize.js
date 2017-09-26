@@ -29,7 +29,7 @@ function getJSONFile(url,descr) {
         var httpReq = new XMLHttpRequest(); // a new http request
     
         var loadSuccess = function() { // if load succeeds, return the parsed response
-            returnValue = JSON.parse(this.response);
+            returnValue = JSON.parse(this.responseText);
         }; // end loadSuccess
     
         httpReq.timeout = 2000; // wait 2 secs for async result then timeout
