@@ -24,7 +24,7 @@ function getJSONFile(url,descr) {
     if ((typeof(url) !== "string") || (typeof(descr) !== "string"))
         console.error("getJSONFile: parameter not a string");
     else { // else we have good params
-        var returnValue; // the value to return
+        var returnValue = String.null; // the default return value
         var httpReq = new XMLHttpRequest(); // a new http request
     
         var loadSuccess = function() { // if load succeeds, return the parsed response
@@ -33,10 +33,9 @@ function getJSONFile(url,descr) {
     
         var loadFail = function(msg) { // if load fails, return a null string
             console.error(msg);
-            returnValue = String.null;
         }; // end loadFail
     
-        httpReq.timeout = 3000; // wait 3 secs for async result then timeout
+        httpReq.timeout = 2000; // wait 2 secs for async result then timeout
         httpReq.ontimeout = function(loadFail) { // note this executes in a different thread
             loadFail("Request timed out for json file " + url);
         } // end http get timeout callback
@@ -44,9 +43,9 @@ function getJSONFile(url,descr) {
         httpReq.onload = function(loadSuccess,loadFail) { // again this executes in a different thread
             if (httpReq.readyState === XMLHttpRequest.DONE) { // if js get request completes
                 if (httpReq.status === 200) // if status received is "done"
-                    return JSON.parse(httpReq.response); 
+                    loadSuccess(); 
                 else
-                    console.error(httpReq.statusText);
+                    loadFail(httpReq.statusText);
             } // end if get request completes
         } // end http get load callback
         
