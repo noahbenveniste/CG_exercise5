@@ -29,7 +29,7 @@ function getJSONFile(url,descr) {
         var httpReq = new XMLHttpRequest(); // a new http request
     
         var loadSuccess = function() { // if load succeeds, return the parsed response
-            returnValue = JSON.parse(httpReq.response);
+            returnValue = JSON.parse(this.response);
         }; // end loadSuccess
     
         httpReq.timeout = 2000; // wait 2 secs for async result then timeout
@@ -40,7 +40,7 @@ function getJSONFile(url,descr) {
         httpReq.onload = function() { // again this executes in a different thread
             if (httpReq.readyState === XMLHttpRequest.DONE) { // if js get request completes
                 if (httpReq.status === 200) // if status received is "done"
-                    loadSuccess(); 
+                    loadSuccess.call(httpReq); 
                 else
                     console.error(httpReq.statusText);
             } // end if get request completes
