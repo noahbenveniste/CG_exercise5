@@ -4,7 +4,7 @@
 const WIN_Z = 0;  // default graphics window z coord in world space
 const WIN_LEFT = 0; const WIN_RIGHT = 1;  // default left and right x coords in world space
 const WIN_BOTTOM = 0; const WIN_TOP = 1;  // default top and bottom y coords in world space
-const INPUT_TRIANGLES_URL = "https://pages.github.ncsu.edu/cgclass/exercise5/triangless.json"; // triangles file loc
+const INPUT_TRIANGLES_URL = "https://pages.github.ncsu.edu/cgclass/exercise5/triangles.json"; // triangles file loc
 const INPUT_ELLIPSOIDS_URL = "https://pages.github.ncsu.edu/cgclass/exercise5/ellipsoids.json"; // ellipsoids file loc
 var Eye = new vec4.fromValues(0.5,0.5,-0.5,1.0); // default eye position in world space
 
@@ -29,7 +29,8 @@ function getJSONFile(url,descr) {
         var httpReq = new XMLHttpRequest(); // a new http request
     
         var loadSuccess = function() { // if load succeeds, return the parsed response
-            console.log(this.responseText);
+            console.log(returnValue);
+            console.log(this.responseText); 
             returnValue = JSON.parse(this.responseText);
         }; // end loadSuccess
     
