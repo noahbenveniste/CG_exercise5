@@ -31,21 +31,17 @@ function getJSONFile(url,descr) {
             returnValue = JSON.parse(httpReq.response);
         }; // end loadSuccess
     
-        var loadFail = function(msg) { // if load fails, return a null string
-            console.error(msg);
-        }; // end loadFail
-    
         httpReq.timeout = 2000; // wait 2 secs for async result then timeout
         httpReq.ontimeout = function(loadFail) { // note this executes in a different thread
-            loadFail("Request timed out for json file " + url);
+            console.error("Request timed out for json file " + url);
         } // end http get timeout callback
         
-        httpReq.onload = function(loadSuccess,loadFail) { // again this executes in a different thread
+        httpReq.onload = function() { // again this executes in a different thread
             if (httpReq.readyState === XMLHttpRequest.DONE) { // if js get request completes
                 if (httpReq.status === 200) // if status received is "done"
                     loadSuccess(); 
                 else
-                    loadFail(httpReq.statusText);
+                    console.error(httpReq.statusText);
             } // end if get request completes
         } // end http get load callback
         
