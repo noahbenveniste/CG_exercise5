@@ -45,6 +45,7 @@ function getJSONFile(url,descr) {
         // when get loads
         function getLoaded(evt) {
             console.log(descr + " loaded.");
+            console.log(httpReq.responseText);
         } // end when get times out
 
         // set up http request object
@@ -60,7 +61,6 @@ function getJSONFile(url,descr) {
         httpReq.send(null); // send the request
     
         // parse get request response
-        console.log(httpReq.responseText);
         // returnValue = JSON.parse(httpReq.responseText);
     } // end if good params
     
