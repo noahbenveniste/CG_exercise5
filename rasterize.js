@@ -28,11 +28,11 @@ function getJSONFile(url,descr) {
     else { // else we have good params
         var httpReq = new XMLHttpRequest(); // a new http request
     
-        var loadSuccess = function() { // if load succeeds, return the parsed response
+        function loadSuccess { // if load succeeds, return the parsed response
             console.log(returnValue);
             console.log(this.responseText); 
             returnValue = JSON.parse(this.responseText);
-        }; // end loadSuccess
+        } // end loadSuccess
     
         httpReq.timeout = 2000; // wait 2 secs for async result then timeout
         httpReq.ontimeout = function() { // note this executes in a different thread
