@@ -26,30 +26,36 @@ function getJSONFile(url,descr) {
     if ((typeof(url) !== "string") || (typeof(descr) !== "string"))
         console.error("getJSONFile: parameter not a string");
     else { // else we have good params
+       
+        // when get fails
+        function getFailed() {
+            console.error(descr + " failed to load.");
+        } // end when get fails
+        
+        // when get aborted
+        function getAborted() { 
+            console.error(descr + " was aborted by user.");
+        } // end when get aborted
+        
+        // when get times out
+        function getTimedOut() {
+            console.error(descr + " took too long to load.");
+        } // end when get times out
+        
+        // set up http request object
         var httpReq = new XMLHttpRequest(); // a new http request
-    
-        function loadSuccess() { // if load succeeds, return the parsed response
-            console.log(returnValue);
-            console.log(this.responseText); 
-            returnValue = JSON.parse(this.responseText);
-        } // end loadSuccess
-    
         httpReq.timeout = 2000; // wait 2 secs for async result then timeout
-        httpReq.ontimeout = function() { // note this executes in a different thread
-            console.error("Request timed out for json file " + url);
-        } // end http get timeout callback
-        
-        httpReq.onload = function() { // again this executes in a different thread
-            if (httpReq.readyState === XMLHttpRequest.DONE) { // if js get request completes
-                if (httpReq.status === 200) // if status received is "done"
-                    loadSuccess.call(httpReq); 
-                else
-                    console.error(httpReq.statusText);
-            } // end if get request completes
-        } // end http get load callback
-        
+        httpReq.addEventListener("error", getFailed);
+        httpReq.addEventListener("abort", getAborted);
+        httpReq.addEventListener("timeout", getTimedOut);
+
+        // issue async get request
         httpReq.open("GET",url,true); // init the request asynchronously
         httpReq.send(null); // send the request
+    
+        // parse get request response
+        console.log(httpReq.response);
+        returnValue = JSON.parse(httpReq.response);
     } // end if good params
     
     return(returnValue);
