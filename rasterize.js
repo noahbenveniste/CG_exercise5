@@ -20,29 +20,39 @@ var vertexPositionAttrib; // where to put position for vertex shader
 
 // get the JSON file from the passed URL
 function getJSONFile(url,descr) {
-    try {
-        if ((typeof(url) !== "string") || (typeof(descr) !== "string"))
-            throw "getJSONFile: parameter not a string";
-        else {
-            var httpReq = new XMLHttpRequest(); // a new http request
-            httpReq.open("GET",url,false); // init the request
-            httpReq.send(null); // send the request
-            var startTime = Date.now();
-            while ((httpReq.status !== 200) && (httpReq.readyState !== XMLHttpRequest.DONE)) {
-                if ((Date.now()-startTime) > 3000)
-                    break;
-            } // until its loaded or we time out after three seconds
-            if ((httpReq.status !== 200) || (httpReq.readyState !== XMLHttpRequest.DONE))
-                throw "Unable to open "+descr+" file!";
-            else
-                return JSON.parse(httpReq.response); 
-        } // end if good params
-    } // end try    
     
-    catch(e) {
-        console.log(e);
-        return(String.null);
-    }
+    if ((typeof(url) !== "string") || (typeof(descr) !== "string"))
+        console.error("getJSONFile: parameter not a string");
+    else { // else we have good params
+        var returnValue; // the value to return
+        var httpReq = new XMLHttpRequest(); // a new http request
+    
+        var loadSuccess = function() { // if load succeeds, return the parsed response
+            returnValue = JSON.parse(httpReq.response);
+        }; // end loadSuccess
+    
+        var loadFail = function(msg) { // if load fails, return a null string
+            console.error(msg);
+            returnValue = String.null;
+        }; // end loadFail
+    
+        httpReq.timeout = 3000; // wait 3 secs for async result then timeout
+        httpReq.ontimeout = function(loadFail) { // note this executes in a different thread
+            loadFail("Request timed out for json file " + url);
+        } // end http get timeout callback
+        
+        httpReq.onload = function(loadSuccess,loadFail) { // again this executes in a different thread
+            if (httpReq.readyState === XMLHttpRequest.DONE) { // if js get request completes
+                if (httpReq.status === 200) // if status received is "done"
+                    return JSON.parse(httpReq.response); 
+                else
+                    console.error(httpReq.statusText);
+            } // end if get request completes
+        } // end http get load callback
+        
+        httpReq.open("GET",url,true); // init the request asynchronously
+        httpReq.send(null); // send the request
+    } // end if good params
 } // end get json file
 
 // set up the webGL environment
