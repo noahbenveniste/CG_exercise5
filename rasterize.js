@@ -42,21 +42,26 @@ function getJSONFile(url,descr) {
             console.error(descr + " took too long to load.");
         } // end when get times out
         
+        // when get loads
+        function getLoaded(evt) {
+            console.log(descr + " loaded.");
+        } // end when get times out
+        
         // set up http request object
         var httpReq = new XMLHttpRequest(); // a new http request
         httpReq.timeout = 2000; // wait 2 secs for async result then timeout
         httpReq.addEventListener("error", getFailed);
         httpReq.addEventListener("abort", getAborted);
         httpReq.addEventListener("timeout", getTimedOut);
-        // httpReq.addEVentListener("load", function(evt) {});
+        httpReq.addEVentListener("load", getLoaded);
 
         // issue async get request
         httpReq.open("GET",url,true); // init the request asynchronously
         httpReq.send(null); // send the request
     
         // parse get request response
-        console.log(httpReq.response);
-        returnValue = JSON.parse(httpReq.response);
+        console.log(httpReq.responseText);
+        returnValue = JSON.parse(httpReq.responseText);
     } // end if good params
     
     return(returnValue);
