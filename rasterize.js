@@ -21,10 +21,11 @@ var vertexPositionAttrib; // where to put position for vertex shader
 // get the JSON file from the passed URL
 function getJSONFile(url,descr) {
     
+    var returnValue = String.null; // the default return value
+
     if ((typeof(url) !== "string") || (typeof(descr) !== "string"))
         console.error("getJSONFile: parameter not a string");
     else { // else we have good params
-        var returnValue = String.null; // the default return value
         var httpReq = new XMLHttpRequest(); // a new http request
     
         var loadSuccess = function() { // if load succeeds, return the parsed response
@@ -32,7 +33,7 @@ function getJSONFile(url,descr) {
         }; // end loadSuccess
     
         httpReq.timeout = 2000; // wait 2 secs for async result then timeout
-        httpReq.ontimeout = function(loadFail) { // note this executes in a different thread
+        httpReq.ontimeout = function() { // note this executes in a different thread
             console.error("Request timed out for json file " + url);
         } // end http get timeout callback
         
@@ -48,6 +49,8 @@ function getJSONFile(url,descr) {
         httpReq.open("GET",url,true); // init the request asynchronously
         httpReq.send(null); // send the request
     } // end if good params
+    
+    return(returnValue);
 } // end get json file
 
 // set up the webGL environment
