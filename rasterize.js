@@ -53,7 +53,7 @@ function getJSONFile(url,descr) {
         httpReq.addEventListener("error", getFailed);
         httpReq.addEventListener("abort", getAborted);
         httpReq.addEventListener("timeout", getTimedOut);
-        httpReq.addEVentListener("load", getLoaded);
+        httpReq.addEventListener("load", getLoaded);
 
         // issue async get request
         httpReq.open("GET",url,true); // init the request asynchronously
