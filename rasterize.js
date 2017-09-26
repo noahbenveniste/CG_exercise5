@@ -29,6 +29,7 @@ function getJSONFile(url,descr) {
         var httpReq = new XMLHttpRequest(); // a new http request
     
         var loadSuccess = function() { // if load succeeds, return the parsed response
+            console.log(this.responseText);
             returnValue = JSON.parse(this.responseText);
         }; // end loadSuccess
     
