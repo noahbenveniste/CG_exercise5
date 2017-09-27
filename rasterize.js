@@ -72,7 +72,7 @@ function getJSONFile(url,descr) {
         var numChecks = 0;
         while (!loadDone && (numChecks < 25)) {
             console.log("loadDone: "+loadDone+", numChecks: "+numChecks);
-            window.setTimeout(function() {;},100);
+            //window.setTimeout(function() {;},100);
             numChecks++;
         } // end while
     } // end if good params
