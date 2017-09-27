@@ -19,6 +19,8 @@ var vertexPositionAttrib; // where to put position for vertex shader
 // ASSIGNMENT HELPER FUNCTIONS
 
 // get the JSON file from the passed URL
+// uses async get with older callback API
+// should one day use newer promise API
 function getJSONFile(url,descr) {
     
     var returnValue = String.null; // the default return value
@@ -27,27 +29,31 @@ function getJSONFile(url,descr) {
         console.error("getJSONFile: parameter not a string");
     else { // else we have good params
         
+        var loadDone = false; // whether the load attempt is done
+        
         // when get fails
         function getFailed(evt) {
+            loadDone = true; 
             console.error(descr + " failed to load.");
         } // end when get fails
 
         // when get aborted
         function getAborted(evt) { 
+            loadDone = true; 
             console.error(descr + " was aborted by user.");
         } // end when get aborted
 
         // when get times out
         function getTimedOut(evt) {
+            loadDone = true; 
             console.error(descr + " took too long to load.");
         } // end when get times out
 
         // when get loads
         function getLoaded(evt) {
+            loadDone = true; 
             console.log(descr + " loaded.");
-            console.log(httpReq.responseText);
             returnValue = JSON.parse(httpReq.responseText);
-            console.log(JSON.stringify(returnValue));
         } // end when get times out
 
         // set up http request object
@@ -61,6 +67,11 @@ function getJSONFile(url,descr) {
         // issue async get request
         httpReq.open("GET",url,true); // init the request asynchronously
         httpReq.send(null); // send the request
+        
+        // wait for http request to complete
+        var numChecks = 0;
+        while (!loadDone && (numChecks < 25))
+            window.setTimeout(function() {numChecks++;});
     } // end if good params
     
     return(returnValue);
