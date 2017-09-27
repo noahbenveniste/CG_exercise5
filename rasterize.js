@@ -19,66 +19,31 @@ var vertexPositionAttrib; // where to put position for vertex shader
 // ASSIGNMENT HELPER FUNCTIONS
 
 // get the JSON file from the passed URL
-// uses async get with older callback API
-// should one day use newer promise API
 function getJSONFile(url,descr) {
+    try {
+        if ((typeof(url) !== "string") || (typeof(descr) !== "string"))
+            throw "getJSONFile: parameter not a string";
+        else {
+            var httpReq = new XMLHttpRequest(); // a new http request
+            httpReq.open("GET",url,false); // init the request
+            httpReq.send(null); // send the request
+            var startTime = Date.now();
+            while ((httpReq.status !== 200) && (httpReq.readyState !== XMLHttpRequest.DONE)) {
+                if ((Date.now()-startTime) > 3000)
+                    break;
+            } // until its loaded or we time out after three seconds
+            if ((httpReq.status !== 200) || (httpReq.readyState !== XMLHttpRequest.DONE))
+                throw "Unable to open "+descr+" file!";
+            else
+                return JSON.parse(httpReq.response); 
+        } // end if good params
+    } // end try    
     
-    var returnValue = String.null; // the default return value
-
-    if ((typeof(url) !== "string") || (typeof(descr) !== "string"))
-        console.error("getJSONFile: parameter not a string");
-    else { // else we have good params
-        
-        var loadDone = false; // whether the load attempt is done
-        
-        // when get fails
-        function getFailed(evt) {
-            loadDone = true; 
-            console.error(descr + " failed to load.");
-        } // end when get fails
-
-        // when get aborted
-        function getAborted(evt) { 
-            loadDone = true; 
-            console.error(descr + " was aborted by user.");
-        } // end when get aborted
-
-        // when get times out
-        function getTimedOut(evt) {
-            loadDone = true; 
-            console.error(descr + " took too long to load.");
-        } // end when get times out
-
-        // when get loads
-        function getLoaded(evt) {
-            loadDone = true; 
-            console.log(descr + " loaded.");
-            returnValue = JSON.parse(httpReq.responseText);
-        } // end when get times out
-
-        // set up http request object
-        var httpReq = new XMLHttpRequest(); // a new http request
-        httpReq.timeout = 2000; // wait 2 secs for async result then timeout
-        httpReq.addEventListener("error", getFailed);
-        httpReq.addEventListener("abort", getAborted);
-        httpReq.addEventListener("timeout", getTimedOut);
-        httpReq.addEventListener("load", getLoaded);
-
-        // issue async get request
-        httpReq.open("GET",url,true); // init the request asynchronously
-        httpReq.send(null); // send the request
-        
-        // wait for http request to complete
-        var numChecks = 0;
-        while (!loadDone && (numChecks < 25)) {
-            console.log("loadDone: "+loadDone+", numChecks: "+numChecks);
-            window.setTimeout(function(){},100);
-            numChecks++;
-        } // end while
-    } // end if good params
-    
-    return(returnValue);
-} // end get json file
+    catch(e) {
+        console.log(e);
+        return(String.null);
+    }
+} // end get input json file
 
 // set up the webGL environment
 function setupWebGL() {
