@@ -71,7 +71,7 @@ function getJSONFile(url,descr) {
         // wait for http request to complete
         var numChecks = 0;
         while (!loadDone && (numChecks < 25))
-            window.setTimeout(function() {numChecks++;});
+            window.setTimeout(function() {numChecks++;},100);
     } // end if good params
     
     return(returnValue);
