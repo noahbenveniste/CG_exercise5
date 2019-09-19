@@ -128,7 +128,7 @@ function setupShaders() {
     // define vertex shader in essl using es6 template strings
     var vShaderCode = `
         attribute vec3 vertexPosition;
-        vec4 translate = vec4[.1,.1,.1,0]
+        vec4 translate = vec4(.1,.1,.1,0);
         void main(void) {
             
             gl_Position = vec4(vertexPosition, 1.0) + translate; // use the untransformed position
