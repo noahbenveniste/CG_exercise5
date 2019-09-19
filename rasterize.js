@@ -121,16 +121,17 @@ function setupShaders() {
     // define fragment shader in essl using es6 template strings
     var fShaderCode = `
         void main(void) {
-            gl_FragColor = vec4(.059, .322, .729, 1.0); // all fragments are white
+            gl_FragColor = vec4(.059, .322, .729, 1.0);
         }
     `;
     
     // define vertex shader in essl using es6 template strings
     var vShaderCode = `
         attribute vec3 vertexPosition;
-
+        vec4 translate = vec4[.1,.1,.1,0]
         void main(void) {
-            gl_Position = vec4(vertexPosition, 1.0); // use the untransformed position
+            
+            gl_Position = vec4(vertexPosition, 1.0) + translate; // use the untransformed position
         }
     `;
     
